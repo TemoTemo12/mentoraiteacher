@@ -52,9 +52,9 @@ const Account = () => {
     }
 
     const preferences: UserPreferences = {
-      learningLevel: formData.learningLevel as any,
+      learningLevel: formData.learningLevel as 'beginner' | 'intermediate' | 'advanced' | 'expert',
       favoriteSubjects: formData.favoriteSubjects,
-      learningStyle: formData.learningStyle as any,
+      learningStyle: formData.learningStyle as 'visual' | 'auditory' | 'kinesthetic' | 'reading',
     };
 
     let result;
@@ -180,7 +180,7 @@ const Account = () => {
                       <select
                         id="level"
                         value={formData.learningLevel}
-                        onChange={(e) => setFormData(prev => ({ ...prev, learningLevel: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, learningLevel: e.target.value as 'beginner' | 'intermediate' | 'advanced' | 'expert' }))}
                         disabled={!isEditing}
                         className={`w-full p-2 border border-slate-300 rounded-md ${!isEditing ? 'bg-slate-50' : ''}`}
                       >
@@ -195,7 +195,7 @@ const Account = () => {
                       <select
                         id="style"
                         value={formData.learningStyle}
-                        onChange={(e) => setFormData(prev => ({ ...prev, learningStyle: e.target.value }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, learningStyle: e.target.value as 'visual' | 'auditory' | 'kinesthetic' | 'reading' }))}
                         disabled={!isEditing}
                         className={`w-full p-2 border border-slate-300 rounded-md ${!isEditing ? 'bg-slate-50' : ''}`}
                       >
