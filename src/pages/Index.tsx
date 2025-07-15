@@ -1,15 +1,17 @@
 
 import React, { useState } from 'react';
-import { Brain, BookOpen, Code, Image, Lightbulb, Target, Users, Zap } from 'lucide-react';
+import { Brain, BookOpen, Code, Image, Lightbulb, Target, Users, Zap, MessageCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { useUser } from '@/hooks/useUser';
 
 const Index = () => {
   const [userInput, setUserInput] = useState('');
   const [userLevel, setUserLevel] = useState('');
+  const { user } = useUser();
 
   const features = [
     {
@@ -68,6 +70,15 @@ const Index = () => {
     { name: "Expert", desc: "Want deep discussions" }
   ];
 
+  const handleStartLearning = () => {
+    if (userInput.trim()) {
+      // Navigate to chat with the user's question
+      window.location.href = `/chat?q=${encodeURIComponent(userInput)}`;
+    } else {
+      window.location.href = '/chat';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       {/* Header */}
@@ -85,9 +96,26 @@ const Index = () => {
                 <p className="text-sm text-slate-600">Your Adaptive Learning Companion</p>
               </div>
             </div>
-            <Badge variant="secondary" className="bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700">
-              AI-Powered Education
-            </Badge>
+            <div className="flex items-center space-x-3">
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.href = '/chat'}
+                className="hidden md:flex"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Start Chat
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.href = '/account'}
+              >
+                <User className="h-4 w-4 mr-2" />
+                {user ? 'Account' : 'Sign Up'}
+              </Button>
+              <Badge variant="secondary" className="bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700">
+                AI-Powered Education
+              </Badge>
+            </div>
           </div>
         </div>
       </header>
@@ -105,6 +133,14 @@ const Index = () => {
             I'm not just another AI - I'm your personal learning mentor who adapts to your style, 
             challenges your thinking, and helps you build deep understanding through interactive teaching.
           </p>
+          
+          {user && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 max-w-md mx-auto">
+              <p className="text-green-800">
+                Welcome back, <strong>{user.name}</strong>! Ready to continue learning?
+              </p>
+            </div>
+          )}
           
           {/* Quick Start Learning */}
           <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-slate-200 shadow-lg max-w-2xl mx-auto">
@@ -138,6 +174,7 @@ const Index = () => {
               
               <Button 
                 size="lg" 
+                onClick={handleStartLearning}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Zap className="mr-2 h-5 w-5" />
@@ -242,14 +279,28 @@ const Index = () => {
           <p className="text-xl mb-8 text-purple-100">
             Start a conversation and experience personalized, adaptive education
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary"
-            className="bg-white text-purple-600 hover:bg-slate-100 font-semibold py-3 px-8 rounded-xl transition-all duration-300"
-          >
-            <Users className="mr-2 h-5 w-5" />
-            Begin Learning Journey
-          </Button>
+          <div className="flex gap-4 justify-center">
+            <Button 
+              size="lg" 
+              variant="secondary"
+              onClick={() => window.location.href = '/chat'}
+              className="bg-white text-purple-600 hover:bg-slate-100 font-semibold py-3 px-8 rounded-xl transition-all duration-300"
+            >
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Start Chatting
+            </Button>
+            {!user && (
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={() => window.location.href = '/account'}
+                className="border-white text-white hover:bg-white hover:text-purple-600 font-semibold py-3 px-8 rounded-xl transition-all duration-300"
+              >
+                <Users className="mr-2 h-5 w-5" />
+                Create Account
+              </Button>
+            )}
+          </div>
         </div>
       </section>
       
